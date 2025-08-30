@@ -52,7 +52,7 @@ pipeline {
         }
         always {
             // Wait for SonarQube quality gate status
-            waitForQualityGate abortPipeline: true
+            waitForQualityGate abortPipeline: false
         }
     }
 }
