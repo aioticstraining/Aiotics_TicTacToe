@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo "🔍 Running SonarQube analysis..."
                 withSonarQubeEnv('Sonarqube') { // 'Sonarqube' is the name configured in Jenkins
-                    sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=${PROJECT_KEY}"
+                    sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.sources=."
                 }
             }
         }
@@ -49,10 +49,6 @@ pipeline {
         }
         failure {
             echo "❌ Build or deployment failed."
-        }
-        always {
-            // Wait for SonarQube quality gate status
-            waitForQualityGate abortPipeline: false
         }
     }
 }
