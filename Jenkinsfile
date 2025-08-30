@@ -36,7 +36,3 @@ pipeline {
         }
     }
 }
-
-
-http://googleusercontent.com/immersive_entry_chip/0
-I have updated your `Jenkinsfile` to map the container's internal port `80` to the host's external port `9090`. I have also updated the `Windows Port Forwarding` guide to use port `9090` for the `netsh` command.
