@@ -15,7 +15,7 @@ pipeline {
         stage('Unit Test') {
             steps {
                 echo "🧪 Running unit tests..."
-                sh "docker run --rm -v \$(pwd):/app -w /app node:16-alpine sh -c \"npm install && npm test\""
+                sh "docker run --rm --dns 8.8.8.8 -v \$(pwd):/app -w /app node:16-alpine sh -c \"npm install && npm test\""
             }
         }
         stage('SonarQube Analysis') {
