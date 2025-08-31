@@ -3,6 +3,8 @@ pipeline {
     environment {
         IMAGE_NAME = "tictactoe-nginx"
         CONTAINER_NAME = "tictactoe-app"
+        // Define the project key for SonarQube
+        PROJECT_KEY = "tictactoe"
     }
     stages {
         stage('Checkout') {
@@ -15,6 +17,14 @@ pipeline {
             steps {
                 echo "🧪 Running unit tests..."
                 sh "docker run --rm -v \$(pwd):/app -w /app node:16-alpine sh -c \"npm install && npm test\""
+            }
+        }
+        stage('SonarQube Analysis') {
+            steps {
+                echo "🔍 Running SonarQube analysis..."
+                withSonarQubeEnv('Sonarqube') { // 'Sonarqube' is the name configured in Jenkins
+                    sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.sources=."
+                }
             }
         }
         stage('Build Docker Image') {
