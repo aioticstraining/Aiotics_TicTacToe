@@ -45,10 +45,11 @@ pipeline {
             steps {
                 echo "🔬 Running integration tests with Cypress..."
                 sh """
-                    docker run --rm --network=host -v \$(pwd):/app -w /app node:16 sh -c "
+                    docker run --rm --network=host -v \$(pwd):/app -w /app node:18 sh -c "
                         apt-get update && apt-get install -y libgtk-3-dev libgconf-2-4 libnss3 libasound2 libxss1 libxkbcommon-x11-0 libgbm-dev xvfb &&
                         npm install &&
-                        npx cypress run --headless --spec 'cypress/e2e/tictactoe.cy.js'
+                        ls -a &&
+                        npx cypress run --headless --config-file cypress.config.js
                     "
                 """
             }
