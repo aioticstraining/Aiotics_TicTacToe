@@ -4,7 +4,7 @@ pipeline {
         IMAGE_NAME = "tictactoe-nginx"
         CONTAINER_NAME = "tictactoe-app"
         PROJECT_KEY = "tictactoe"
-        NEXUS_REPO_URL = "your-nexus-repo-url:8081" // <-- Replace with your Nexus URL
+        NEXUS_REPO_URL = "localhost:8081" // <-- Replace with your Nexus URL
     }
     stages {
         stage('Checkout') {
