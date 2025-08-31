@@ -4,7 +4,7 @@ pipeline {
         IMAGE_NAME = "tictactoe-nginx"
         CONTAINER_NAME = "tictactoe-app"
         PROJECT_KEY = "tictactoe"
-        NEXUS_REPO_URL = "http://localhost:8081/repository/docker-private/" // <-- Replace with your Nexus URL
+        NEXUS_REPO_URL = "localhost:8083/docker-private" // <-- Corrected format: no http://
     }
     stages {
         stage('Checkout') {
@@ -27,21 +27,21 @@ pipeline {
                 }
             }
         }
-stage('Docker Login') {
-    steps {
-        echo "🔑 Logging in to Nexus Docker registry..."
-        withCredentials([usernamePassword(credentialsId: 'nexus-credential', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-            sh '''
-                echo "Logging in as user: $NEXUS_USERNAME"
-                echo "$NEXUS_PASSWORD" | docker login localhost:8082 -u $NEXUS_USERNAME --password-stdin
-            '''
+        stage('Docker Login') {
+            steps {
+                echo "🔑 Logging in to Nexus Docker registry..."
+                withCredentials([usernamePassword(credentialsId: 'nexus-credential', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    sh """
+                        echo "Logging in as user: $NEXUS_USERNAME"
+                        echo "$NEXUS_PASSWORD" | docker login ${NEXUS_REPO_URL} -u $NEXUS_USERNAME --password-stdin
+                    """
+                }
+            }
         }
-    }
-}
         stage('Build Docker Image') {
             steps {
                 echo "🐳 Building and tagging Docker image..."
-                sh "docker build -t ${IMAGE_NAME} -t ${NEXUS_REPO_URL}/${IMAGE_NAME}:${env.BUILD_ID} ."
+                sh "docker build -t ${NEXUS_REPO_URL}/${IMAGE_NAME}:${env.BUILD_ID} ."
             }
         }
         stage('Push to Nexus') {
@@ -84,4 +84,3 @@ stage('Docker Login') {
         }
     }
 }
-
