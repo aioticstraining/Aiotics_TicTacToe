@@ -33,7 +33,7 @@ stage('Docker Login') {
         withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
             sh '''
                 echo "Logging in as user: $NEXUS_USERNAME"
-                docker login localhost:8082 -u $NEXUS_USERNAME --password-stdin <<< "$NEXUS_PASSWORD"
+                docker login localhost:8081 -u $NEXUS_USERNAME --password-stdin <<< "$NEXUS_PASSWORD"
             '''
         }
     }
