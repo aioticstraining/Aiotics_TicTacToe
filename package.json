@@ -1,12 +1,15 @@
 {
-"name": "tic-tac-toe-app",
-"version": "1.0.0",
-"description": "A simple Tic Tac Toe game.",
-"main": "index.js",
-"scripts": {
-"test": "node test_game.js"
-},
-"keywords": [],
-"author": "",
-"license": "ISC"
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cypress": "^13.13.1"
+  }
 }
