@@ -3,7 +3,6 @@ pipeline {
     environment {
         IMAGE_NAME = "tictactoe-nginx"
         CONTAINER_NAME = "tictactoe-app"
-        // Define the project key for SonarQube
         PROJECT_KEY = "tictactoe"
     }
     stages {
@@ -22,7 +21,7 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 echo "🔍 Running SonarQube analysis..."
-                withSonarQubeEnv('Sonarqube') { // 'Sonarqube' is the name configured in Jenkins
+                withSonarQubeEnv('Sonarqube') {
                     sh "/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=${PROJECT_KEY} -Dsonar.sources=."
                 }
             }
@@ -45,7 +44,7 @@ pipeline {
         stage('Integration Test') {
             steps {
                 echo "🔬 Running integration tests with Cypress..."
-                sh "docker run --rm --network=host -v \$(pwd):/app -w /app node:16-alpine sh -c \"apk add --no-cache xvfb && npm install cypress && npx cypress run --headless --spec 'cypress/e2e/tictactoe.cy.js'\""
+                sh "docker run --rm --network=host -v \$(pwd):/app -w /app node:16 sh -c \"npm install && npx cypress run --headless --no-sandbox --spec 'cypress/e2e/tictactoe.cy.js'\""
             }
         }
     }
