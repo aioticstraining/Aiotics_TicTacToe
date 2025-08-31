@@ -4,7 +4,8 @@ pipeline {
         IMAGE_NAME = "tictactoe-nginx"
         CONTAINER_NAME = "tictactoe-app"
         PROJECT_KEY = "tictactoe"
-        NEXUS_REPO_URL = "localhost:8082/docker-private" // Corrected port
+        NEXUS_REPO_URL = "localhost:8082/docker-private" // For pushing
+        NEXUS_LOGIN_URL = "localhost:8082" // New: For logging in
     }
     stages {
         stage('Checkout') {
@@ -33,7 +34,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'nexus-credential', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                     sh """
                         echo "Logging in as user: $NEXUS_USERNAME"
-                        echo "$NEXUS_PASSWORD" | docker login ${NEXUS_REPO_URL} -u $NEXUS_USERNAME --password-stdin
+                        echo "$NEXUS_PASSWORD" | docker login ${NEXUS_LOGIN_URL} -u $NEXUS_USERNAME --password-stdin
                     """
                 }
             }
