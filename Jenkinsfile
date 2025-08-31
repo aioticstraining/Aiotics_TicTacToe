@@ -27,14 +27,17 @@ pipeline {
                 }
             }
         }
-        stage('Docker Login') {
-            steps {
-                echo "🔑 Logging in to Nexus Docker registry..."
-                withCredentials([usernamePassword(credentialsId: 'nexus-credential', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
-                    sh "docker login ${NEXUS_REPO_URL} -u ${NEXUS_USERNAME} -p ${NEXUS_PASSWORD}"
-                }
-            }
+stage('Docker Login') {
+    steps {
+        echo "🔑 Logging in to Nexus Docker registry..."
+        withCredentials([usernamePassword(credentialsId: 'nexus-credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+            sh '''
+                echo "Logging in as user: $NEXUS_USERNAME"
+                docker login localhost:8082 -u $NEXUS_USERNAME --password-stdin <<< "$NEXUS_PASSWORD"
+            '''
         }
+    }
+}
         stage('Build Docker Image') {
             steps {
                 echo "🐳 Building and tagging Docker image..."
