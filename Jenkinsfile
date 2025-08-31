@@ -4,7 +4,7 @@ pipeline {
         IMAGE_NAME = "tictactoe-nginx"
         CONTAINER_NAME = "tictactoe-app"
         PROJECT_KEY = "tictactoe"
-        NEXUS_REPO_URL = "localhost:8083/docker-private" // <-- Corrected format: no http://
+        NEXUS_REPO_URL = "localhost:8082/docker-private" // Corrected port
     }
     stages {
         stage('Checkout') {
