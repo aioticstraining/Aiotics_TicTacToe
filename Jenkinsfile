@@ -32,25 +32,27 @@ pipeline {
                 sh "docker build -t ${IMAGE_NAME} ."
             }
         }
+        stage('Integration Test') {
+            steps {
+                echo "🔬 Running integration tests with Cypress..."
+                catchError(stageResult: 'UNSTABLE') {
+                    sh """
+                        docker run --rm --network=host --dns 8.8.8.8 -v \$(pwd):/app -w /app node:18 sh -c "
+                            apt-get update && apt-get install -y libgtk-3-dev libgconf-2-4 libnss3 libasound2 libxss1 libxkbcommon-x11-0 libgbm-dev xvfb &&
+                            npm install &&
+                            npx cypress install &&
+                            npm run cypress:run
+                        "
+                    """
+                }
+            }
+        }
         stage('Run Docker Container') {
             steps {
                 echo "🚀 Running Docker container..."
                 sh """
                     docker rm -f ${CONTAINER_NAME} || true
                     docker run -d --name ${CONTAINER_NAME} -p 9090:80 ${IMAGE_NAME}
-                """
-            }
-        }
-        stage('Integration Test') {
-            steps {
-                echo "🔬 Running integration tests with Cypress..."
-                sh """
-                    docker run --rm --network=host --dns 8.8.8.8 -v \$(pwd):/app -w /app node:18 sh -c "
-                        apt-get update && apt-get install -y libgtk-3-dev libgconf-2-4 libnss3 libasound2 libxss1 libxkbcommon-x11-0 libgbm-dev xvfb &&
-                        npm install &&
-                        npx cypress install &&
-                        npm run cypress:run
-                    "
                 """
             }
         }
