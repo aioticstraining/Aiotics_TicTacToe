@@ -44,7 +44,7 @@ pipeline {
         stage('Integration Test') {
             steps {
                 echo "🔬 Running integration tests with Cypress..."
-                sh "docker run --rm --network=host -v \$(pwd):/app -w /app node:16 sh -c \"npm install && npx cypress run --headless --no-sandbox --spec 'cypress/e2e/tictactoe.cy.js'\""
+                sh "docker run --rm --network=host -v \$(pwd):/app -w /app node:16 sh -c \"npm install && npx cypress run --headless --spec 'cypress/e2e/tictactoe.cy.js'\""
             }
         }
     }
